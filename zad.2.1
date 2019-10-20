@@ -1,0 +1,95 @@
+using System;
+using System.Collections.Generic;
+
+namespace WzorzecAdapter{
+  
+  public class Users{
+    
+    public string[][] GetUsers(){     
+      
+      string[][] klienci = new string[3][];
+      
+      klienci[0] = new string[] { "1", "Adam", "Nowak" };
+      klienci[1] = new string[] { "2", "Katarzyna", "Kowalska" };
+      klienci[2] = new string[] { "3", "Wojciech", "Jankowski" };
+      
+      return klienci;
+      
+    }
+    
+  }
+
+  //
+  // interfejs dla adaptera
+  //
+  
+  interface INaszInterfejs
+  {
+    List<string> GetClients();
+  }
+  
+  
+  public class Adapter : INaszInterfejs{
+    
+    private Users adaptee = null;
+    
+    //
+    // konstruktor przypisuje obiekt obcej klasy do atrybutu
+    //
+    public Adapter(Users obj)
+    {
+      adaptee = obj;
+    }
+    
+    public List<string> GetClients(){
+      
+      string[][] tablica = this.adaptee.GetUsers();
+      
+      //
+      // trzeba odczytać listę klientów z obcego obiektu (z atrybutu)
+      // i przekazać do zmiennej lista (pamiętać o deklaracji w obrębie metody)
+      //
+      List<string> lista = new List<string>();
+      string klient;
+      foreach(var element in tablica)
+      {
+        klient = "";
+        foreach(var element2 in element)
+        {
+          klient += element2 + ",";
+        }
+        klient = klient.Remove(klient.Length-1);
+        lista.Add(klient);
+        
+      }
+      
+      return lista;
+      
+    }
+    
+  }
+
+
+  public class Program{
+    
+    static void Main(string[] args){
+      
+      Users obj = new Users();
+      INaszInterfejs adapter = new Adapter(obj);
+      List<string> klienci = adapter.GetClients();
+      
+      //
+      // wyświetlić na konsoli wszystkich klientówz listy
+      //
+      foreach(var klient in klienci)
+      {
+          Console.WriteLine(klient);
+      }
+
+        
+    }
+    
+  }
+
+
+}
